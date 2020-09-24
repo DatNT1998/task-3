@@ -3,10 +3,10 @@ import React from 'react';
 
 import { Button } from 'reactstrap';
 
-const Bookmark = ({ title, links, showModal }) => {
-    console.log("props nay ", showModal)
+const Bookmark = ({ title, links, showModal, id }) => {
+    console.log("props nay", showModal)
     const handleShow = () => {
-        showModal();
+        showModal(id);
     }
     return (
         <div className="bookmark">

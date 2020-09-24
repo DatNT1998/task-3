@@ -5,12 +5,14 @@ import Bookmark from './bookmark.component';
 import { Modal } from 'antd';
 
 class GroupBookmark extends Component {
+    currentGroupId = -1;
     constructor(props) {
         super();
 
         this.state = {
             data: [],
-            visibleModalDel: false
+            visibleModalDel: false,
+            currentId: undefined
         }
     }
 
@@ -27,16 +29,22 @@ class GroupBookmark extends Component {
 
     showModal = (id) => {
         this.setState({
-            visibleModalDel: true
+            visibleModalDel: true,
+            currentId: id,
         })
     }
 
-    handleOk = (id) => {
+    handleOk = () => {
+
+        const dataRemain = this.state.data;
+        console.log(this.currentGroupId, 'kkkkkkkkkkkkkkkkkkkkk')
+        dataRemain[this.currentGroupId].bookmarks.filter(item => item.id !== this.state.currentId);
+        console.log(dataRemain, 'data remain')
         this.setState({
-            visibleModalDel: false
+            visibleModalDel: false,
+            data: [dataRemain, ...this.state.data]
         })
-
-
+        console.log(this.state.data, 'data sau khi thay doi')
     }
 
     render() {
@@ -50,25 +58,32 @@ class GroupBookmark extends Component {
                             <div key={index} className="col-6">
                                 <h3> {item.name} </h3>
                                 {
-                                    item.bookmarks.map(({ links, title, id }) => (
+                                    item.bookmarks.map(({ links, title, id }, indexChild) => (
                                         <React.Fragment>
-                                            <Bookmark title={title} links={links} showModal={() => {
-                                                this.showModal()
+                                            <Bookmark key={indexChild} title={title} links={links} showModal={() => {
+                                                this.currentGroupId = index
+                                                console.log(index, 'index');
+                                                console.log(id, 'id');
+                                                this.showModal(id)
                                             }} />
                                         </React.Fragment>
                                     ))
                                 }
-                                <Modal
-                                    visible={visibleModalDel}
-                                    onOk={() => this.handleOk()}
-                                    title="Delete Bookmark"
-                                >
-                                    <p> Bạn có chắc chắn muốn xóa bookmark ?</p>
-                                </Modal>
+
                             </div>
                         ))
                     }
                 </div>
+                <Modal
+                    visible={visibleModalDel}
+                    onOk={() => this.handleOk()}
+                    onCancel={() => this.setState({
+                        visibleModalDel: false,
+                    })}
+                    title="Delete Bookmark"
+                >
+                    <p> Bạn có chắc chắn muốn xóa bookmark ?</p>
+                </Modal>
             </React.Fragment>
         );
     }
