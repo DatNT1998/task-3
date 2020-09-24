@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Bookmark from './bookmark.component';
 
 import { Modal } from 'antd';
@@ -10,22 +9,12 @@ class GroupBookmark extends Component {
         super();
 
         this.state = {
-            data: [],
             visibleModalDel: false,
             currentId: undefined
         }
     }
 
-    componentDidMount() {
 
-        axios.get(`http://localhost:3000/data`)
-            .then(res => {
-                const data = res.data;
-                this.setState({ data });
-                console.log(this.state.data, 'ahihi');
-            })
-            .catch(error => console.log(error));
-    }
 
     showModal = (id) => {
         this.setState({
@@ -36,19 +25,19 @@ class GroupBookmark extends Component {
 
     handleOk = () => {
 
-        const dataRemain = this.state.data;
-        console.log(this.currentGroupId, 'kkkkkkkkkkkkkkkkkkkkk')
-        dataRemain[this.currentGroupId].bookmarks.filter(item => item.id !== this.state.currentId);
-        console.log(dataRemain, 'data remain')
+        const remainData = this.props.data;
+        const result = remainData[this.currentGroupId].bookmarks.filter(item => item.id !== this.state.currentId);
+        remainData[this.currentGroupId].bookmarks = result;
         this.setState({
             visibleModalDel: false,
-            data: [dataRemain, ...this.state.data]
+            data: remainData
         })
-        console.log(this.state.data, 'data sau khi thay doi')
+        console.log(this.props.data, 'data sau khi thay doi')
     }
 
     render() {
-        const { data, visibleModalDel } = this.state;
+        const { visibleModalDel } = this.state;
+        const { data } = this.props;
 
         return (
             <React.Fragment>
@@ -59,8 +48,8 @@ class GroupBookmark extends Component {
                                 <h3> {item.name} </h3>
                                 {
                                     item.bookmarks.map(({ links, title, id }, indexChild) => (
-                                        <React.Fragment>
-                                            <Bookmark key={indexChild} title={title} links={links} showModal={() => {
+                                        <React.Fragment key={indexChild}>
+                                            <Bookmark title={title} links={links} showModal={() => {
                                                 this.currentGroupId = index
                                                 console.log(index, 'index');
                                                 console.log(id, 'id');

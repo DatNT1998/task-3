@@ -1,6 +1,6 @@
 .main-title {
   text-align: center;
-  margin-bottom: 30px;
+  margin: 30px;
 }
 
 .bookmark {
@@ -26,4 +26,15 @@
 h3 {
   /* text-align: center; */
   margin-left: 40px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.button-add {
+  height: 38px;
+  margin-right: 120px;
 }
