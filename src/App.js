@@ -3,15 +3,18 @@ import axios from 'axios';
 import './App.css';
 import GroupBookmark from './components/GroupBookmark.component';
 import { Button } from 'reactstrap';
-import { Modal } from 'antd'
+import { Modal, Form, Input, Select } from 'antd'
 
 class App extends React.Component {
     constructor(props) {
         super();
         this.state = {
             data: [],
-            visibleModalAdd: false
+            visibleModalAdd: false,
+            title: '',
+            link: '',
         }
+        this.nameGroup = '';
     }
 
     componentDidMount() {
@@ -29,6 +32,43 @@ class App extends React.Component {
     showModalAdd = () => {
         this.setState({
             visibleModalAdd: true
+        })
+    }
+
+    handleTitle = (e) => {
+        this.setState({
+            title: e.target.value
+        })
+    }
+
+    handleLink = (e) => {
+        this.setState({
+            link: e.target.value
+        })
+    }
+
+
+    handleChange = (value) => {
+        this.nameGroup = value;
+    }
+
+    handleOk = () => {
+
+        const obj = { id: "15", title: this.state.title, links: this.state.link }
+
+        let mang = this.state.data;
+        for (var i = 0; i < mang.length; i++) {
+            if (this.nameGroup === mang[i].name) {
+                mang[i].bookmarks.push(obj);
+            }
+        }
+
+        console.log(mang, 'mang can su dung')
+
+        console.log(this.nameGroup, 'nameGroup')
+        this.setState({
+            visibleModalAdd: false,
+            data: mang
         })
     }
 
@@ -52,7 +92,32 @@ class App extends React.Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <p> Modal Add</p>
+                    <Form
+                        labelCol={{
+                            span: 4,
+                        }}
+                        wrapperCol={{
+                            span: 14,
+                        }}
+                        layout="horizontal"
+                    >
+                        <Form.Item label="title">
+                            <Input type="text" onChange={this.handleTitle} />
+                        </Form.Item>
+                        <Form.Item label="link">
+                            <Input type="text" onChange={this.handleLink} />
+                        </Form.Item>
+                        <Form.Item label="Select">
+                            <Select onChange={this.handleChange} >
+                                {
+                                    data.map((item, index) => (
+                                        <Select.Option key={index} value={item.name}>{item.name} </Select.Option>
+                                    ))
+                                }
+                            </Select>
+                        </Form.Item>
+
+                    </Form>
                 </Modal>
             </div>
 

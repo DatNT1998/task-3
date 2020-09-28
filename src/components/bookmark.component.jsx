@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from 'reactstrap';
 
 const Bookmark = ({ title, links, showModal, id }) => {
-    console.log("props nay", showModal)
+    // console.log("props nay", showModal)
     const handleShow = () => {
         showModal(id);
     }
